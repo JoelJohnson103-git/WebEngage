@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Popup</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        /* Main Card */
+        .card {
+            background-color: #8e2e98;
+            color: white;
+            width: 100%;
+            max-width: 850px;
+            min-height: 500px;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            background-image: linear-gradient(rgba(142, 46, 152, 0.85), rgba(142, 46, 152, 0.85)), url('phone.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        /* Content Styling */
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0 0 1rem 0;
+            line-height: 1.2;
+            position: relative;
+            z-index: 10;
+        }
+
+        .separator {
+            width: 50px;
+            height: 4px;
+            background: white;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .highlight {
+            color: #FCD385; /* Gold color */
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        p {
+            margin: 0 0 1.5rem 0;
+            opacity: 0.9;
+            line-height: 1.5;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Form */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        input {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 1rem;
+        }
+
+        button.action-btn {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            background-color: #1a1a1a;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        button.action-btn:hover {
+            background-color: black;
+        }
+
+        /* Success View Styles */
+        .success-view {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .code-container {
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .code-container:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .code-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        .copy-hint {
+            display: block;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+            font-weight: normal;
+        }
+
+        .toast {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #10B981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* Desktop Layout */
+        @media (min-width: 768px) {
+            .card {
+                padding: 4rem;
+                align-items: flex-end; 
+                text-align: left;
+                background-image: url('web.png');
+            }
+
+            h2 { font-size: 2.5rem; }
+            .highlight { font-size: 3.5rem; }
+            
+            .content-wrapper {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <button class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+
+        <div class="content-wrapper">
+            <h2>DON'T LEAVE <br> WITHOUT A DISCOUNT!</h2>
+            <div class="separator"></div>
+            
+            <p>
+                Here's
+                <span class="highlight">FLAT 25% OFF</span>
+                only for you. Enjoy your wellness one gummy at a time!
+            </p>
+
+            <!-- Step 1: Input Form -->
+            <form id="signup-form" onsubmit="handleUnlock(event)">
+                <input type="email" placeholder="Email Address" required>
+                <input type="tel" placeholder="Contact No." required>
+                <button type="submit" class="action-btn">Unlock My Code</button>
+            </form>
+
+            <!-- Step 2: Success/Code View -->
+            <div id="success-view" class="success-view">
+                <div class="code-container" onclick="copyCode()">
+                    <div id="toast" class="toast">Copied to clipboard!</div>
+                    <div class="code-text">USE CODE: <span id="promo-code">WUW25</span></div>
+                </div>
+                <button class="action-btn" onclick="window.location.href='#shop'">Shop Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleUnlock(event) {
+            event.preventDefault();
+            // Hide form
+            document.getElementById('signup-form').style.display = 'none';
+            // Show success view
+            document.getElementById('success-view').style.display = 'flex';
+        }
+
+        function copyCode() {
+            const codeText = document.getElementById('promo-code').innerText;
+            
+            // Modern copy approach
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(codeText);
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = codeText;
+                textArea.style.position = "fixed";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            // Show toast
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>
