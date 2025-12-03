@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nunjucks Assignment Solution</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nunjucks/3.2.3/nunjucks.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        h3 { color: #333; border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+        li { margin-bottom: 5px; }
+        .output-container { background: #f9f9f9; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>Nunjucks Assignment Output</h1>
+    <div id="output" class="output-container">Loading...</div>
+
+    <script type="text/template" id="myTemplate">
+        <h3>1. ID Check (Even/Odd for ID > 4)</h3>
+        <ul>
+        {% for item in data %}
+            {% if item.id > 4 %}
+                {% if item.id % 2 == 0 %}
+                    <li>{{ item.id }} : {{ item.username }} is even</li>
+                {% else %}
+                    <li>I'm Odd</li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <h3>2. Negative Longitude</h3>
+        <ul>
+        {% for item in data %}
+            {% if item.address.geo.lng < 0 %}
+                <li>{{ item.username }} : {{ item.address.city }} : {{ item.address.geo.lng }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <h3>3. Biz Emails</h3>
+        <ul>
+        {% for item in data %}
+            {# Check if email ends with .biz using slice #}
+            {% if item.email.slice(-4) == ".biz" %}
+                <li>{{ item.name }} : {{ item.email }} : {{ item.company.name }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <h3>4. High Suite Numbers in Specific Cities</h3>
+        <ul>
+        {% for item in data %}
+            {% if item.address.city in ["Aliyaview", "Howemouth", "Gwenborough"] %}
+                {# Remove 'Suite ' and convert to integer #}
+                {% set suiteNum = item.address.suite | replace("Suite ", "") | int %}
+                
+                {% if suiteNum > 500 %}
+                    <li>{{ item.username }} : {{ item.email }} : {{ item.address.suite }}</li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <h3>5. CatchPhrase (Max 15 chars)</h3>
+        <ul>
+        {% for item in data %}
+            {% if item.company.catchPhrase.length <= 15 %}
+                <li>{{ item.company.catchPhrase }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </script>
+
+    <script>
+        // Sample Data (Matching the names/cities in your assignment)
+        const usersData = [
+            {
+                "id": 1, "name": "Leanne Graham", "username": "Bret", "email": "Sincere@april.biz",
+                "address": { "street": "Kulas Light", "suite": "Suite 556", "city": "Gwenborough", "geo": { "lat": "-37.3159", "lng": "81.1496" } },
+                "company": { "name": "Romaguera-Crona", "catchPhrase": "Multi-layered client-server neural-net" }
+            },
+            {
+                "id": 5, "name": "Chelsey Dietrich", "username": "Kamren", "email": "Lucio_Hettinger@annie.ca",
+                "address": { "street": "Skiles Walks", "suite": "Suite 351", "city": "Roscoeview", "geo": { "lat": "-31.8129", "lng": "-25.8753" } },
+                "company": { "name": "Keebler LLC", "catchPhrase": "User-centric fault-tolerant solution" }
+            },
+            {
+                "id": 6, "name": "Mrs. Dennis Schulist", "username": "Leopoldo_Corkery", "email": "Karley_Dach@jasper.info",
+                "address": { "street": "Norberto Crossing", "suite": "Suite 447", "city": "South Christy", "geo": { "lat": "-71.4197", "lng": "71.7478" } },
+                "company": { "name": "Considine-Lockman", "catchPhrase": "Synchronised bottom-line interface" }
+            },
+            {
+                "id": 9, "name": "Glenna Reichert", "username": "Delphine", "email": "Chaim_McDermott@dana.io",
+                "address": { "street": "Dayna Park", "suite": "Suite 449", "city": "Bartholomebury", "geo": { "lat": "24.6463", "lng": "-168.8889" } },
+                "company": { "name": "Yost and Sons", "catchPhrase": "Switchable contextually-based project" }
+            },
+            {
+                "id": 10, "name": "Clementina DuBuque", "username": "Moriah.Stanton", "email": "Rey.Padberg@karina.biz",
+                "address": { "street": "Kattie Turnpike", "suite": "Suite 198", "city": "Lebsackbury", "geo": { "lat": "-38.2386", "lng": "57.2232" } },
+                "company": { "name": "Hoeger LLC", "catchPhrase": "Centralized empowering task-force" }
+            },
+            {
+                // Custom entry to test Question 4 specific logic
+                "id": 11, "name": "Maxime Nienow", "username": "Maxime_Nienow", "email": "Sherwood@rosamond.me",
+                "address": { "street": "Ellsworth Summit", "suite": "Suite 729", "city": "Aliyaview", "geo": { "lat": "-14.3990", "lng": "-120.7677" } },
+                "company": { "name": "Deckow-Crist", "catchPhrase": "Short Phrase" }
+            }
+        ];
+
+        // 1. Get the template string from the script tag above
+        var templateSource = document.getElementById('myTemplate').innerHTML;
+
+        // 2. Render the template using Nunjucks
+        // We pass the usersData array as 'data' because the template loops over 'data'
+        var renderedHtml = nunjucks.renderString(templateSource, { data: usersData });
+
+        // 3. Inject the result into the page
+        document.getElementById('output').innerHTML = renderedHtml;
+    </script>
+
+</body>
+</html>

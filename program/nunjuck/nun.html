@@ -1,0 +1,62 @@
+<!-- 1. ID Check (Even/Odd) -->
+<ul>
+{% for item in data %}
+    {% if item.id > 4 %}
+        {% if item.id % 2 == 0 %}
+            <li>{{ item.id }} : {{ item.username }} is even</li>
+        {% else %}
+            <li>I'm Odd</li>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+</ul>
+
+<hr>
+
+<!-- 2. Negative Longitude -->
+<ul>
+{% for item in data %}
+    {% if item.address.geo.lng < 0 %}
+        <li>{{ item.username }} : {{ item.address.city }} : {{ item.address.geo.lng }}</li>
+    {% endif %}
+{% endfor %}
+</ul>
+
+
+<!-- 3. Biz Emails -->
+<ul>
+{% for item in data %}
+    {# Slice the last 4 characters to check if they match '.biz' #}
+    {% if item.email.slice(-4) == ".biz" %}
+        <li>{{ item.name }} : {{ item.email }} : {{ item.company.name }}</li>
+    {% endif %}
+{% endfor %}
+</ul>
+
+<hr>
+
+<!-- 4. High Suite Numbers in Specific Cities -->
+<ul>
+{% for item in data %}
+    {% if item.address.city in ["Aliyaview", "Howemouth", "Gwenborough"] %}
+        
+        {# Remove the text "Suite " and convert the remaining string to a number #}
+        {% set suiteNum = item.address.suite | replace("Suite ", "") | int %}
+        
+        {% if suiteNum > 500 %}
+            <li>{{ item.username }} : {{ item.email }} : {{ item.address.suite }}</li>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+</ul>
+
+
+
+<!-- 5. CatchPhrase (Max 15 chars) -->
+<ul>
+{% for item in data %}
+    {% if item.company.catchPhrase.length <= 15 %}
+        <li>{{ item.company.catchPhrase }}</li>
+    {% endif %}
+{% endfor %}
+</ul>
