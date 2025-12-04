@@ -19,7 +19,7 @@
             padding: 1rem;
         }
 
-        /* Main Card */
+        
         .card {
             background-color: #8e2e98;
             color: white;
@@ -40,7 +40,7 @@
             background-repeat: no-repeat;
         }
 
-        /* Close Button */
+        
         .close-btn {
             position: absolute;
             top: 1rem;
@@ -53,7 +53,7 @@
             z-index: 20;
         }
 
-        /* Content Styling */
+        
         h2 {
             font-size: 1.8rem;
             font-weight: 800;
@@ -88,7 +88,7 @@
             z-index: 10;
         }
 
-        /* Form */
+        
         form {
             display: flex;
             flex-direction: column;
@@ -124,9 +124,9 @@
             background-color: black;
         }
 
-        /* Success View Styles */
+        
         .success-view {
-            display: none; /* Hidden by default */
+            display: none; 
             flex-direction: column;
             gap: 1.5rem;
             max-width: 400px;
@@ -184,7 +184,6 @@
             opacity: 1;
         }
 
-        /* Desktop Layout */
         @media (min-width: 768px) {
             .card {
                 padding: 4rem;
@@ -217,14 +216,14 @@
                 only for you. Enjoy your wellness one gummy at a time!
             </p>
 
-            <!-- Step 1: Input Form -->
+           
             <form id="signup-form" onsubmit="handleUnlock(event)">
                 <input type="email" placeholder="Email Address" required>
                 <input type="tel" placeholder="Contact No." required>
                 <button type="submit" class="action-btn">Unlock My Code</button>
             </form>
 
-            <!-- Step 2: Success/Code View -->
+           
             <div id="success-view" class="success-view">
                 <div class="code-container" onclick="copyCode()">
                     <div id="toast" class="toast">Copied to clipboard!</div>
@@ -238,20 +237,16 @@
     <script>
         function handleUnlock(event) {
             event.preventDefault();
-            // Hide form
             document.getElementById('signup-form').style.display = 'none';
-            // Show success view
             document.getElementById('success-view').style.display = 'flex';
         }
 
         function copyCode() {
             const codeText = document.getElementById('promo-code').innerText;
             
-            // Modern copy approach
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(codeText);
             } else {
-                // Fallback for older browsers
                 const textArea = document.createElement("textarea");
                 textArea.value = codeText;
                 textArea.style.position = "fixed";
@@ -266,7 +261,6 @@
                 document.body.removeChild(textArea);
             }
 
-            // Show toast
             const toast = document.getElementById('toast');
             toast.classList.add('show');
             setTimeout(() => {
